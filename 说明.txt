@@ -1,0 +1,7 @@
+query_device.exe 是执行文件
+console.log 控制台日志
+devicesLog.log 登录执行命令日志
+check.xlsx 配置设备信息的xlsx
+
+运行网络要求，可以连通以下机器的网络
+218.97.9.147 （根据设备获取ip的信息。）
