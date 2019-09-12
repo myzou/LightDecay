@@ -57,7 +57,7 @@ def get_message(username,password,sign):
     message='username=%s&&password=%s&&sign=%s&&timestamp=%s' % (username, password, sign, str(int(time.time())))
     return message
 
-# 读取excel 执行
+# 读取excel 执行了
 def read_xls(filename):
     wb = load_workbook(filename)
     tempExecuteLog=""
