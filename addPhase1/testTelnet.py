@@ -209,7 +209,7 @@ def getMinMax(filename,SheetName):
 
 
 minrow=2
-maxrow=2000
+maxrow=11
 
 if __name__ == '__main__':
     startTime = datetime.now()
