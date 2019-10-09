@@ -11,17 +11,10 @@ import rsa
 import time
 from time import strftime, localtime
 import openpyxl
-from openpyxl import load_workbook
 from urllib.request import urlopen
-import sys
 import json
-import random
 import csv
 import pymysql
-from datetime import datetime
-from urllib.parse import quote,unquote
-
-
 
 
 ##单个查询内容
@@ -84,7 +77,6 @@ logging.basicConfig(level=logging.DEBUG,#控制台打印的日志级别
 
 def readReult():
     try:
-        logging.basicConfig(format='',filemode='a', level=logging.DEBUG, filename='error.log')
         data = queryLogin()
         username, password, APIURL, sign,command1, before_csv,after_csv = getConfig()
         after_result=read_csv_map(after_csv)
@@ -93,7 +85,7 @@ def readReult():
         after_csv=str(after_csv).replace('.csv','.log')
         if os.path.exists(after_csv):
             os.remove(after_csv)
-        logging.basicConfig(format='',filemode='a', level=logging.DEBUG, filename=after_csv)
+        logging.basicConfig(format='', filemode='a', level=logging.DEBUG, filename=after_csv)
         logging.info(getNowTime())
         logging.info('=================start=================')
 
@@ -108,8 +100,9 @@ def readReult():
             logging.info(str(ggwAPI(ip, tempCommand, APIURL=APIURL, username=username, password=password)).replace('\n', ''))
         logging.info('=================end=================')
     except Exception as e:
+        logging.basicConfig(format='',filemode='a', level=logging.DEBUG, filename='error.log')
         print(traceback.format_exc())
-        logging.error(traceback.format_exc())
+        logging.error(getNowTime()+'\n'+traceback.format_exc())
 
 
 #读取execl 改变excel内容
@@ -188,15 +181,15 @@ def ggwAPI(ip,command,APIURL='http://10.180.5.135:48888',username='op1768',passw
 ## 加载conf里面的配置
 def getConfig(configName='config.conf'):
     config = configparser.ConfigParser()
-    config.read(configName,encoding='UTF-8')
+    config.read(configName,encoding='UTF-8-sig')
     lists_header = config.sections()  # 配置组名, ['luzhuo.me', 'mysql'] # 不含'DEFAULT'
-    loginOP = config.get('login', 'loginOP')
-    loginOPPassword = config.get('login', 'loginOPPassword')
-    before_csv = config.get('csv_config', 'before_csv');
-    after_csv = config.get('csv_config', 'after_csv');
-    ggwApiUrl = config.get('default_config', 'ggwApiUrl')
-    sign = config.get('default_config', 'sign');
-    command1 = config.get('default_config', 'command1');
+    loginOP = str(config.get('login', 'loginOP')).replace('\n','').replace(' ', '')
+    loginOPPassword = str(config.get('login', 'loginOPPassword')).replace('\n','').replace(' ', '')
+    before_csv = str(config.get('csv_config', 'before_csv'))
+    after_csv = str(config.get('csv_config', 'after_csv'))
+    ggwApiUrl = str(config.get('default_config', 'ggwApiUrl'))
+    sign = str(config.get('default_config', 'sign'))
+    command1 = str(config.get('default_config', 'command1'))
     return loginOP,loginOPPassword,ggwApiUrl,sign,command1,before_csv,after_csv
 
 
