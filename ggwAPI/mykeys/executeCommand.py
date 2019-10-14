@@ -3,6 +3,7 @@
 
 import base64
 import traceback
+
 import rsa
 import time
 from time import strftime, localtime
@@ -13,6 +14,9 @@ import pymysql
 
 
 ##单个查询内容
+from cryptography.hazmat.backends import openssl
+
+
 def queryLogin():
      # 打开数据库连接
      db = pymysql.connect("218.97.9.147", "nss_script", "ZX4XdUpH", "nm_shared_info", charset='utf8')
@@ -44,10 +48,11 @@ def getNowTime():
     return nowTime
 
 def encode_rsa(message, APIURL,ip,command):
-    #公钥从文件中读取
-    with open('my_public_key.pem', 'r') as f:
-        pubkeyStr=f.read().encode()
-        pubkey = rsa.PublicKey.load_pkcs1(pubkeyStr)
+    # publicKey="-----BEGIN RSA PUBLIC KEY-----\nMIIBCgKCAQEAh/hChlpkRA+zkkEB8ZoCrVcsYsbFSXYoTBKlrdCu0LiGeKs2T+U7\nkyZ/WZ8GP498PIucz6GYN03BWOOPe5nHWfwO05XqTid6+0ni+Bfy4Ev0FyCOQsod\nmQpH4ytgn0UOp8BZyJTwdN4rtMcuY/FFnyAsFpg9+F0DtlM/dVMj/UcWaMiZIBaa\n35XkXoPa+ng8Z7ORVOPiRHXfMGrlb9gZWF5XHN1SHNBKha1uF3wexDHVm4+k3Hvb\naZFkHrgLndaYuCPPtetnSNUOw2iaiNo7Nfze1Y4ACyfvRczHEGxFEC9X7tj/Rcy2\ngmC9JCErxDQAHitX8DJrKtoeSJN8GvZZJQIDAQAB\n-----END RSA PUBLIC KEY-----\n"
+    # pubkey = rsa.PublicKey.load_pkcs1(publicKey)
+    # #公钥从文件中读取
+    with open('pkcs1_public.pem', 'r') as f: \
+        pubkey = rsa.PublicKey.load_pkcs1(f.read().encode())
 
     temp = str(base64.b64encode(rsa.encrypt(message.encode(), pubkey)),'utf-8')
     # 登录GGW
@@ -110,9 +115,10 @@ def get_restul( *args, **kwargs):
 
 
 if __name__ == '__main__':
-
-    # ip='218.96.240.95'
-    # command='ping interface ge-0/0/0.3  rapid source 218.96.231.213 218.96.231.214 count 99'
     ip = '202.76.8.226'
-    command = 'show interfaces descriptions'
-    print(get_restul(ip,command))
+    command = 'show interfaces descriptions | match trunk'
+    # APIURL='http://210.5.3.30:8083'
+    APIURL = 'http://10.180.5.13:48888'
+    print(get_restul(ip,command,APIURL=APIURL))
+
+

@@ -129,7 +129,14 @@ def readExcel(filename):
      wb.close()
 
 def encode_rsa(message, APIURL,ip,command):
-    publicKey="-----BEGIN RSA PUBLIC KEY-----\nMIIBCgKCAQEAh/hChlpkRA+zkkEB8ZoCrVcsYsbFSXYoTBKlrdCu0LiGeKs2T+U7\nkyZ/WZ8GP498PIucz6GYN03BWOOPe5nHWfwO05XqTid6+0ni+Bfy4Ev0FyCOQsod\nmQpH4ytgn0UOp8BZyJTwdN4rtMcuY/FFnyAsFpg9+F0DtlM/dVMj/UcWaMiZIBaa\n35XkXoPa+ng8Z7ORVOPiRHXfMGrlb9gZWF5XHN1SHNBKha1uF3wexDHVm4+k3Hvb\naZFkHrgLndaYuCPPtetnSNUOw2iaiNo7Nfze1Y4ACyfvRczHEGxFEC9X7tj/Rcy2\ngmC9JCErxDQAHitX8DJrKtoeSJN8GvZZJQIDAQAB\n-----END RSA PUBLIC KEY-----\n"
+    publicKey = "-----BEGIN RSA PUBLIC KEY-----\n\
+                MIIBCgKCAQEAh/hChlpkRA+zkkEB8ZoCrVcsYsbFSXYoTBKlrdCu0LiGeKs2T+U7\n\
+                kyZ/WZ8GP498PIucz6GYN03BWOOPe5nHWfwO05XqTid6+0ni+Bfy4Ev0FyCOQsod\n\
+                mQpH4ytgn0UOp8BZyJTwdN4rtMcuY/FFnyAsFpg9+F0DtlM/dVMj/UcWaMiZIBaa\n\
+                35XkXoPa+ng8Z7ORVOPiRHXfMGrlb9gZWF5XHN1SHNBKha1uF3wexDHVm4+k3Hvb\n\
+                aZFkHrgLndaYuCPPtetnSNUOw2iaiNo7Nfze1Y4ACyfvRczHEGxFEC9X7tj/Rcy2\n\
+                gmC9JCErxDQAHitX8DJrKtoeSJN8GvZZJQIDAQAB\n\
+                -----END RSA PUBLIC KEY-----"
     pubkey = rsa.PublicKey.load_pkcs1(publicKey)
     #公钥从文件中读取
     # with open(pub_file, 'r') as f:
@@ -213,7 +220,7 @@ def get_restul(*args,**kwargs):
 if __name__ == '__main__':
     # ip='218.96.240.95'
     # command='ping interface ge-0/0/0.3  rapid source 218.96.231.213 218.96.231.214 count 99'
-    ip = '218.96.240.201'
+    ip = '202.76.8.226'
     command = 'show interfaces descriptions | match trunk'
-    APIURL='http://10.180.5.135:48888'
+    APIURL='http://210.5.3.177:48888'
     print(get_restul(ip,command,APIURL=APIURL))

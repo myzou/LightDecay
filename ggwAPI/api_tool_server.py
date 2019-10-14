@@ -19,7 +19,7 @@ login_param=['username','password','sign','timestamp']
 execute_param=['username','password','sign','timestamp','ip','command']
 
 
-with open('mykeys/my_private_key.pem','r') as f:
+with open('mykeys/pkcs1_private.pem','r') as f:
      privkey = rsa.PrivateKey.load_pkcs1(f.read().encode())
 
 
@@ -136,6 +136,7 @@ def execute(param):
             login_status[param['username']][param['sign']]['targethost'][param['ip']]['login_tunnle'],
             param['command'].replace('%20',' ').replace('%7C','|'))
     except:
+        print()
         return json.dumps(error_db.error_code('10004'))
     print(str(int(time.time())) + ' command ' + param['command'] + ' ' + param['ip'])
     login_status[param['username']][param['sign']]['time']=int(time.time())

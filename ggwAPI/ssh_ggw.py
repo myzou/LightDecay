@@ -69,6 +69,8 @@ def test(ip='218.96.240.95', command='ping interface ge-0/0/0.3  rapid source 21
 
 if __name__ == '__main__':
     # test()
-    ip = '202.76.8.226'
-    command = ' show interfaces descriptions '
+    # ip = '202.76.8.226'
+    # command = ' show interfaces descriptions '
+    ip='218.96.240.95'
+    command='ping interface ge-0/0/0.3  rapid source 218.96.231.213 218.96.231.214 count 99'
     get_restul(ip,command)
