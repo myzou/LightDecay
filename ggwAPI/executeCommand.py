@@ -129,13 +129,22 @@ def readExcel(filename):
      wb.close()
 
 def encode_rsa(message, APIURL,ip,command,pub_file):
+    publicKey ="-----BEGIN RSA PUBLIC KEY-----\n\
+                MIIBCgKCAQEAh/hChlpkRA+zkkEB8ZoCrVcsYsbFSXYoTBKlrdCu0LiGeKs2T+U7\n\
+                kyZ/WZ8GP498PIucz6GYN03BWOOPe5nHWfwO05XqTid6+0ni+Bfy4Ev0FyCOQsod\n\
+                mQpH4ytgn0UOp8BZyJTwdN4rtMcuY/FFnyAsFpg9+F0DtlM/dVMj/UcWaMiZIBaa\n\
+                35XkXoPa+ng8Z7ORVOPiRHXfMGrlb9gZWF5XHN1SHNBKha1uF3wexDHVm4+k3Hvb\n\
+                aZFkHrgLndaYuCPPtetnSNUOw2iaiNo7Nfze1Y4ACyfvRczHEGxFEC9X7tj/Rcy2\n\
+                gmC9JCErxDQAHitX8DJrKtoeSJN8GvZZJQIDAQAB\n\
+                -----END RSA PUBLIC KEY-----"
+    pubkey = rsa.PublicKey.load_pkcs1(publicKey)
     #公钥从文件中读取
-    with open(pub_file, 'r') as f: \
-        pubkey = rsa.PublicKey.load_pkcs1(f.read().encode())
+    # with open(pub_file, 'r') as f: \
+    #     pubkey = rsa.PublicKey.load_pkcs1(f.read().encode())
     temp = str(base64.b64encode(rsa.encrypt(message.encode(), pubkey)),'utf-8')
     # 登录GGW
     login = APIURL+'/GetLoginSession/RSA?crypto_sign=' + temp
-    command=command.replace(' ','%20')
+    command=command.replace(' ','%20').replace('|','%7C')
     #登录PE并执行命令
     exec = APIURL + '/ExecuteCommand/RSA?crypto_sign=' + temp + \
           '&&command='+command+'&&ip={0}'.format(ip)
@@ -210,12 +219,12 @@ def get_restul(*args,**kwargs):
 if __name__ == '__main__':
     # ip='218.96.240.95'
     # command='ping interface ge-0/0/0.3  rapid source 218.96.231.213 218.96.231.214 count 99'
-    ip = '202.76.8.226',
+    ip = "202.76.8.226"
     command = 'show interfaces descriptions | match trunk'
     APIURL='http://210.5.3.177:48888'
     # APIURL='http://10.180.5.135:48888'
     # APIURL='http://10.180.5.13:48888'
 
-    # for i  in range(1,1000):
-    #     print("================"+str(i)+"==================")
-    print(get_restul(ip, command, APIURL=APIURL, pub_file='mykeys/dickson_pkcs1_public.pem'))
+    for i  in range(1,1000):
+        print("================"+str(i)+"==================")
+        print(get_restul(ip, command, APIURL=APIURL, pub_file='mykeys/dickson_pkcs1_public.pem'))
