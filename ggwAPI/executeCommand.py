@@ -210,7 +210,7 @@ def get_restul(*args,**kwargs):
 if __name__ == '__main__':
     # ip='218.96.240.95'
     # command='ping interface ge-0/0/0.3  rapid source 218.96.231.213 218.96.231.214 count 99'
-    ip = '202.76.8.226'
+    ip = '202.76.8.226',
     command = 'show interfaces descriptions | match trunk'
     APIURL='http://210.5.3.177:48888'
     # APIURL='http://10.180.5.135:48888'
