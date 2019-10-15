@@ -128,21 +128,10 @@ def readExcel(filename):
      wb.save(filename)
      wb.close()
 
-def encode_rsa(message, APIURL,ip,command):
-    publicKey = "-----BEGIN RSA PUBLIC KEY-----\n\
-                MIIBCgKCAQEAh/hChlpkRA+zkkEB8ZoCrVcsYsbFSXYoTBKlrdCu0LiGeKs2T+U7\n\
-                kyZ/WZ8GP498PIucz6GYN03BWOOPe5nHWfwO05XqTid6+0ni+Bfy4Ev0FyCOQsod\n\
-                mQpH4ytgn0UOp8BZyJTwdN4rtMcuY/FFnyAsFpg9+F0DtlM/dVMj/UcWaMiZIBaa\n\
-                35XkXoPa+ng8Z7ORVOPiRHXfMGrlb9gZWF5XHN1SHNBKha1uF3wexDHVm4+k3Hvb\n\
-                aZFkHrgLndaYuCPPtetnSNUOw2iaiNo7Nfze1Y4ACyfvRczHEGxFEC9X7tj/Rcy2\n\
-                gmC9JCErxDQAHitX8DJrKtoeSJN8GvZZJQIDAQAB\n\
-                -----END RSA PUBLIC KEY-----"
-    pubkey = rsa.PublicKey.load_pkcs1(publicKey)
+def encode_rsa(message, APIURL,ip,command,pub_file):
     #公钥从文件中读取
-    # with open(pub_file, 'r') as f:
-    #     print(f.read().encode())
-    #     pubkey = rsa.PublicKey.load_pkcs1(f.read().encode())
-
+    with open(pub_file, 'r') as f: \
+        pubkey = rsa.PublicKey.load_pkcs1(f.read().encode())
     temp = str(base64.b64encode(rsa.encrypt(message.encode(), pubkey)),'utf-8')
     # 登录GGW
     login = APIURL+'/GetLoginSession/RSA?crypto_sign=' + temp
@@ -164,9 +153,10 @@ def get_result_page(url):
     return str(res,'utf-8')
 
 
-def ggwAPI(ip,command,APIURL='http://10.180.5.135:48888',username='op1768',password='Abc1015',sign='123456'):
+def ggwAPI(ip,command,APIURL='http://10.180.5.135:48888',username='op1768',password='Abc1015',sign='123456',
+           pub_file='mykeys/dickson_pkcs1_public.pem'):
     mg = get_message(username, password, sign)
-    login, exec = encode_rsa(mg, APIURL, ip, command)
+    login, exec = encode_rsa(mg, APIURL, ip, command,pub_file)
     print("login:", login)
     print("exec:", exec)
     # print("login return:", get_result_page(login))
@@ -223,4 +213,9 @@ if __name__ == '__main__':
     ip = '202.76.8.226'
     command = 'show interfaces descriptions | match trunk'
     APIURL='http://210.5.3.177:48888'
-    print(get_restul(ip,command,APIURL=APIURL))
+    # APIURL='http://10.180.5.135:48888'
+    # APIURL='http://10.180.5.13:48888'
+
+    # for i  in range(1,1000):
+    #     print("================"+str(i)+"==================")
+    print(get_restul(ip, command, APIURL=APIURL, pub_file='mykeys/dickson_pkcs1_public.pem'))
