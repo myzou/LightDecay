@@ -12,34 +12,8 @@ from urllib.request import urlopen
 import json
 import pymysql
 
-
-##单个查询内容
 from cryptography.hazmat.backends import openssl
 
-
-def queryLogin():
-     # 打开数据库连接
-     db = pymysql.connect("218.97.9.147", "nss_script", "ZX4XdUpH", "nm_shared_info", charset='utf8')
-     # 使用 cursor() 方法创建一个游标对象 cursor
-     cursor = db.cursor()
-
-     # 使用 execute()  方法执行 SQL 查询
-     # cursor.execute( "select ip,full_name from devices where full_name in ('CNSHHCJX1001E','CNSHHTAF1004E','CNSHHCJX1002E','CNSHHTAF1005E','CNSHHFTX1002E','CNSHHSDS1001E','CNSHHFTX1001E','CNSHHSJG1001E')  ")
-     cursor.execute( "select ip,full_name from devices ")
-
-     # 使用 fetchone() 方法获取单条数据.
-     data = cursor.fetchall()
-     db.close()
-     # 关闭数据库连接
-     for line in data:
-          print(line[0] + "," + line[1])
-     return data
-
-#根据获取的设备信息来获取ip
-def getIp(data,device_name):
-     for i in range(0,data.__len__()) :
-          if data[i][1] == device_name:
-               return data[i][0]
 
 
 # 打印当前时间
@@ -81,16 +55,14 @@ def ggwAPI(ip,command,APIURL='http://10.180.5.13:48888',username='op1768',passwo
     login, exec = encode_rsa(mg, APIURL, ip, command)
     print("login:", login)
     print("exec:", exec)
-    # print("login return:", get_result_page(login))
-    # print("exec return:", get_result_page(exec))
     try:
         login_str = get_result_page(login)
-        print("login_str:"+login_str)
+        print(getNowTime()+"  login_str:"+login_str)
         if str(json.loads(login_str)['code']) in ['10003', '0']:
             returnExec = get_result_page(exec)
             if str(json.loads(returnExec)['code']) in ['10003', '0']:
                 returnExecStr = json.loads(returnExec)['data']
-                print('data:'+returnExecStr)
+                print(getNowTime()+'  data:'+returnExecStr)
                 return returnExecStr
         else:
             print('登录失败,请检查账号和密码是否正确')
@@ -121,6 +93,7 @@ if __name__ == '__main__':
     APIURL = 'http://10.180.5.13:48888'
     APIURL = 'http://210.5.3.177:48888'
 
-    print(get_restul(ip,command,APIURL=APIURL))
+    ggwAPI(ip,command,APIURL=APIURL)
+    # print(get_restul(ip,command,APIURL=APIURL))
 
 
