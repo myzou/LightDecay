@@ -1,0 +1,5 @@
+IP Transit report  sample.xlsx 数据文件
+report.exe 是执行命令按钮，双击执行，执行完毕可以看数据文件
+report.py  源码，有兴趣可以看
+log.txt 日志
+config.conf 配置文件，可以配置对应扫描的日期
